@@ -42,7 +42,8 @@ const SignIn = () => {
     userApis
       .signin(data)
       .then(res => {
-        console.log(res.userId);
+        console.log(res);
+        localStorage.setItem('token', res.data.access_token);
         navigate('/todo');
       })
       .catch(err => {

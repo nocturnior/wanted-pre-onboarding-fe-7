@@ -21,7 +21,7 @@ export const userApis = {
   },
   createTodo: async data => {
     const response = await authApi.post('/todos', data);
-    console.log('🚀 ⁝ data', data)
+    console.log('🚀 ⁝ data', data);
     return response;
   },
   updateTodo: async data => {
