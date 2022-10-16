@@ -8,9 +8,8 @@ export const getAPIHost = () => {
 
 export const authApi = axios.create({
   baseUrl: getAPIHost(),
-  withCredentials: true,
-  // headers: { authorization: bearerToken },
-}); 
+  headers: { 'Content-Type': 'application/json', withCredentials: true },
+});
 
 authApi.interceptors.request.use(req => {
   const token = getToken();
@@ -30,7 +29,7 @@ authApi.interceptors.response.use(
         axios
           .post(getAPIHost() + '/api/auth/reissue', {
             headers: {
-              // refresh_token: `${refresh_token}`,
+              refresh_token: `${refresh_token}`,
               'Content-Type': 'application/json',
             },
           })

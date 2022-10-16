@@ -3,18 +3,25 @@ import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
 import TodoEdit from './TodoEdit';
 
+import { userApis } from './../apis/auth';
+
 const TodoEl = ({ todos, onToggle, onEdit, onRemove }) => {
-  const { id, title, con, isDone } = todos;
+  const { id, todo, isCompleted } = todos;
+
+  React.useEffect(() => {
+    userApis.getTodo(todos).then(res => {
+      console.log(res);
+    });
+  });
 
   return (
     <div className='todoitem'>
       <ItemBlock>
-        <CheckCircle isDone={isDone} onClick={() => onToggle(id)}>
-          {isDone && <MdDone />}
+        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(id)}>
+          {isCompleted && <MdDone />}
         </CheckCircle>
 
-        <Title isDone={isDone}>{title}</Title>
-        <Con isDone={isDone}>{con}</Con>
+        <Title isCompleted={isCompleted}>{todo}</Title>
 
         <Edit onClick={() => onEdit(id)}>
           <MdEdit />
@@ -74,7 +81,7 @@ const CheckCircle = styled.div`
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  border: ${props => (props.isDone ? `1px solid #008080` : `1px solid #43BFC7`)};
+  border: ${props => (props.isCompleted ? `1px solid #008080` : `1px solid #43BFC7`)};
   font-size: 16px;
   font-weight: 800;
   display: flex;
@@ -82,7 +89,7 @@ const CheckCircle = styled.div`
   justify-content: center;
   margin-right: 15px;
   cursor: pointer;
-  color: ${props => props.isDone && `#4C787E`};
+  color: ${props => props.isCompleted && `#4C787E`};
 `;
 
 const Title = styled.span`
@@ -90,14 +97,14 @@ const Title = styled.span`
   font-size: 16px;
   font-weight: 600;
   margin-right: 10px;
-  color: ${props => (props.isDone ? `gray` : `#2c2f33`)};
-  text-decoration-line: ${props => props.isDone && `line-through`};
+  color: ${props => (props.isCompleted ? `gray` : `#2c2f33`)};
+  text-decoration-line: ${props => props.isCompleted && `line-through`};
 `;
 
 const Con = styled.span`
   // flex: 1;
   font-size: 14px;
   margin-right: 20px;
-  color: ${props => (props.isDone ? `gray` : `#2c2f33`)};
-  text-decoration-line: ${props => props.isDone && `line-through`};
+  color: ${props => (props.isCompleted ? `gray` : `#2c2f33`)};
+  text-decoration-line: ${props => props.isCompleted && `line-through`};
 `;

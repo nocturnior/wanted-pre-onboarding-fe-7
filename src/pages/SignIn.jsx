@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 // apis
 import { userApis } from '../apis/auth';
@@ -23,6 +24,13 @@ const SignIn = () => {
   // 버튼 활성/비활성
   const [isEnable, setIsEnable] = useState(true);
 
+  // enter키로 로그인
+  const onKeyDown = e => {
+    if (e.key === 'Enter') {
+      onSigninHandler(e);
+    }
+  };
+
   // 로그인 핸들러
   const onSigninHandler = e => {
     e.preventDefault();
@@ -34,7 +42,7 @@ const SignIn = () => {
     userApis
       .signin(data)
       .then(res => {
-        console.log(res);
+        console.log(res.userId);
         navigate('/todo');
       })
       .catch(err => {
@@ -59,10 +67,10 @@ const SignIn = () => {
       <h1 style={{ fontSize: '30px', fontWeight: '700', textAlign: 'center', margin: '20px 0px' }}>로그인</h1>
 
       {/* 이메일 */}
-      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} />
+      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} onKeyDown={onKeyDown} />
 
       {/* 비밀번호 */}
-      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} minlength={'8'} inref={passwordInputRef} />
+      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} minlength={'8'} inref={passwordInputRef} onKeyDown={onKeyDown} />
 
       {/* 회원가입으로 */}
       <GoSignup
@@ -103,8 +111,12 @@ const Wrap = styled.div`
 `;
 
 const GoSignup = styled.div`
+  cursor: pointer;
   text-align: center;
   color: #aaa;
   font-size: 0.875rem;
   margin: 30px auto;
+  &:hover {
+    color: #22438a;
+  }
 `;

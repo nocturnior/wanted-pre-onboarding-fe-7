@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const TodoHeader = ({ todos, setTodos }) => {
-  const undoneTasks = todos.filter(todo => !todo.isdone);
+  const undoneTasks = todos.filter(todo => !todo.isCompleted);
 
   const today = new Date();
   const dateString = today.toLocaleDateString('ko-KR', {

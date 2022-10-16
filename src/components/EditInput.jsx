@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const EditInput = ({ inputLabel, name, type, value, onChange, disabled, placeholder, minlength,inref }) => {
+const EditInput = ({ inputLabel, name, type, value, onChange, disabled, placeholder, minlength, inref, onKeyDown }) => {
   const [inputValue, setInputValue] = React.useState('');
 
   return (
@@ -10,7 +10,7 @@ const EditInput = ({ inputLabel, name, type, value, onChange, disabled, placehol
         {inputLabel}
       </label>
 
-      <input type={type} name={name} value={value} onChange={onChange} required disabled={disabled} placeholder={placeholder} minLength={minlength} ref={inref} ></input>
+      <input type={type} name={name} value={value} onChange={onChange} required disabled={disabled} placeholder={placeholder} minLength={minlength} ref={inref} onKeyDown={onKeyDown}></input>
     </StyleWrap>
   );
 };

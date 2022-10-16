@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 // Components
@@ -6,6 +6,7 @@ import TodoHeader from '../components/TodoHeader';
 import TodoForm from '../components/TodoForm';
 import TodoList from '../components/TodoList';
 import TodoEdit from '../components/TodoEdit';
+import { userApis } from './../apis/auth';
 
 const Todos = () => {
   const [todos, setTodos] = React.useState([]);
@@ -14,14 +15,14 @@ const Todos = () => {
   const onToggle = id => {
     setTodos(
       todos.map(todo => {
-        return todo.id === id ? { ...todo, isDone: !todo.isDone } : todo;
+        return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
       })
     );
   };
 
   const onEdit = id => {
     setIsOpen(true);
-  }; 
+  };
 
   const onRemove = id => {
     setTodos(todos.filter(todos => todos.id !== id));

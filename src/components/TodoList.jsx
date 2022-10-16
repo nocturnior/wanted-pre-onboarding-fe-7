@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TodoEl from './TodoEl';
 
-function TodoList({ todos, onToggle, onRemove }) {
+import { userApis } from '../apis/auth';
+
+const TodoList = ({ todos, onToggle, onRemove }) => {
+
+  // useEffect(() => {
+  //   userApis.getTodo().then(res => {
+  //     console.log(res);
+  //   });
+  // }, []);
+
   return (
     <div id='todoboard_wrap'>
       <div className='todos'>
@@ -11,6 +20,6 @@ function TodoList({ todos, onToggle, onRemove }) {
       </div>
     </div>
   );
-}
+};
 
 export default TodoList;

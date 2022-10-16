@@ -19,8 +19,9 @@ export const userApis = {
     const response = await authApi.get('/todos', data);
     return response;
   },
-  createTodo: async ({ id, todo, isCompleted, userId }) => {
-    const response = await authApi.post('/todos', { id, todo, isCompleted, userId });
+  createTodo: async data => {
+    const response = await authApi.post('/todos', data);
+    console.log('🚀 ⁝ data', data)
     return response;
   },
   updateTodo: async data => {

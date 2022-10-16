@@ -18,41 +18,15 @@ const SignUp = () => {
   // 버튼 활성/비활성
   const [isEnable, setIsEnable] = React.useState(true);
 
-  const onSignupHandler = e => {
-    e.preventDefault();
-
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
-
-    // validation
-    if (isEnable) {
-    } else {
-      console.log('되나?');
-      fetch('https://pre-onboarding-selection-task.shop/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-          // withCredentials: true,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => {
-        if (res.ok) {
-          console.log(res.data);
-        } else {
-          return res.json().then(data => {
-            // show an error modal
-            console.log(data);
-          });
-        }
-      });
+  // enter키로 로그인
+  const onKeyDown = e => {
+    if (e.key === 'Enter') {
+      onSignupHandler(e);
     }
   };
 
-  const onSubmitHandler = e => {
+  // validation
+  const onSignupHandler = e => {
     e.preventDefault();
 
     const enteredEmail = emailInputRef.current.value;
@@ -74,11 +48,10 @@ const SignUp = () => {
   return (
     <Wrap>
       <h1 style={{ fontSize: '30px', fontWeight: '700', textAlign: 'center', margin: '20px 0px' }}>회원가입</h1>
-      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} />
-      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} inref={passwordInputRef} minlength={8} />
-      {/* <EditInput inputLabel={'비밀번호 확인'} placeholder={'비밀번호'} type={'password'} /> */}
+      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} onKeyDown={onKeyDown} />
+      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} inref={passwordInputRef} minlength={8} onKeyDown={onKeyDown} />
       <GoSignup onClick={() => navigate('/')}>이미 회원이신가요?</GoSignup>
-      <Button buttonName={'회원가입'} onClick={onSubmitHandler} />
+      <Button buttonName={'회원가입'} onClick={onSignupHandler} />
     </Wrap>
   );
 };
