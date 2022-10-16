@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { authApi, setToken } from '../api';
+import { authApi } from '../api';
 
 export const userApis = {
   signin: async data => {
     const response = await authApi.post('/auth/signin', data);
-    if (response.status === 200) {
-      const token = { access_token: response.headers.authorization, refresh_token: response.headers['refresh-token'] };
-      setToken(token);
-    }
+    // if (response.status === 200) {
+    //   const token = { access_token: response.headers.authorization, refresh_token: response.headers['refresh-token'] };
+    //   setToken(token);
+    // }
     return response;
   },
   signup: async data => {

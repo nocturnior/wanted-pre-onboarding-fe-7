@@ -10,7 +10,7 @@ export const authApi = axios.create({
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    Authorization: `Bearer ${localStorage.setItem('access_token')}`,
   },
   withCredentials: true,
 });
@@ -18,12 +18,10 @@ export const authApi = axios.create({
 // WHAT 비동기 실행
 authApi.interceptors.request.use(
   config => {
-    config.headers['Authorization'] = localStorage.getItem('token');
+    config.headers['Authorization'] = localStorage.getItem('access_token');
     return config;
   },
   err => {
     return Promise.reject(err);
   }
 );
-
-
