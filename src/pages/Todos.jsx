@@ -12,6 +12,12 @@ const Todos = () => {
   const [todos, setTodos] = React.useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    userApis.getTodo(todos).then(res => {
+      setTodos(res.data);
+    });
+  });
+
   const onToggle = id => {
     setTodos(
       todos.map(todo => {
@@ -21,10 +27,18 @@ const Todos = () => {
   };
 
   const onEdit = id => {
+    userApis.updateTodo(res => {
+      setTodos(
+        todos.map(todo => {
+          return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+        })
+      );
+    });
     setIsOpen(true);
   };
 
-  const onRemove = id => {
+  const onRemove = () => {
+    userApis.deleteTodo(id);
     setTodos(todos.filter(todos => todos.id !== id));
   };
 

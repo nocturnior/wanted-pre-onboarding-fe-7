@@ -28,7 +28,7 @@ export const userApis = {
     return response;
   },
   deleteTodo: async data => {
-    const response = await authApi.delete('/todos/:id', data);
+    const response = await authApi.delete(`/todos/:id` + data);
     return response;
   },
 };
