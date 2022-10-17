@@ -7,10 +7,11 @@ import { userApis } from './../apis/auth';
 
 const TodoEl = ({ todos, onToggle, onEdit, onRemove }) => {
   const { id, todo, isCompleted } = todos;
+  const [aa, setAA] = React.useState([]);
 
   React.useEffect(() => {
     userApis.getTodo(todos).then(res => {
-      console.log(res);
+      setAA(res.data);
     });
   });
 

@@ -6,7 +6,7 @@ import EditInput from './EditInput';
 import MainButton from './MainButton';
 import { userApis } from './../apis/auth';
 
-const TodoForm = ({ todos, setTodos }) => {
+const TodoForm = ({ todos, setTodos, key }) => {
   // 제목, 내용 인풋 밸류 가져오기
   const [inputTitleValue, setInputTitleValue] = useState('');
 
@@ -14,14 +14,13 @@ const TodoForm = ({ todos, setTodos }) => {
 
   const addItem = e => {
     e.preventDefault();
-    setTodos([...todos, { todo: inputTitleValue, isCompleted: false }]);
+    setTodos([...todos, { key: key, todo: inputTitleValue, isCompleted: false }]);
     setInputTitleValue('');
 
     userApis
       .createTodo(data)
       .then(res => {
-        console.log(res.data);
-        // localStorage.setItem('token', res.data.data.access_token);
+        console.log('ㅎㅇ',res)
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);
