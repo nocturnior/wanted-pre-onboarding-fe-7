@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 
 // Components
 import EditInput from './EditInput';
@@ -15,15 +14,14 @@ const TodoForm = ({ todos, setTodos }) => {
 
   const addItem = e => {
     e.preventDefault();
-
-    // setTodos([...todos, { id: { uuidv4 }, todo: inputTitleValue, isCompleted: false }]);
+    setTodos([...todos, { todo: inputTitleValue, isCompleted: false }]);
     setInputTitleValue('');
 
     userApis
       .createTodo(data)
       .then(res => {
         console.log(res.data);
-        // setTodos([...todos, { id: { uuidv4 }, todo: inputTitleValue, isCompleted: false }]);
+        // localStorage.setItem('token', res.data.data.access_token);
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);
