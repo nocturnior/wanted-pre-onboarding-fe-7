@@ -3,7 +3,10 @@ import TodoEl from './TodoEl';
 import { v4 as uuidv4 } from 'uuid';
 import { userApis } from '../apis/auth';
 
+import TodoEdit from '../components/TodoEdit';
+
 const TodoList = ({ todos, setTodos, onToggle }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
   const onRemove = id => {
     userApis
       .deleteTodo(id)
@@ -22,15 +25,8 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
     // setTodos([todos].filter(todo => todo.id !== id));
   };
 
-  const onEdit = id => {
-    userApis.updateTodo(res => {
-      setTodos(
-        todos.map(todo => {
-          return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
-        })
-      );
-    });
-    // setIsOpen(true);
+  const onEdit = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -38,6 +34,10 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
       <div className='todos'>
         {todos?.map(todos => {
           return <TodoEl todos={todos} key={uuidv4()} onRemove={onRemove} onEdit={onEdit} onToggle={onToggle} />;
+        })}
+        {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
+        {todos?.map(todos => {
+          return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
         })}
       </div>
     </div>

@@ -4,45 +4,50 @@ import useInput from '../hooks/useInput';
 
 // Components
 import MainButton from './MainButton';
+import { userApis } from '../apis/auth';
 
-const TodoEdit = ({ setIsOpen, title, content, id, tag }) => {
-  console.log('🚀 ~ tag', Array.isArray(tag));
-  // const dispatch = React.useDispatch();
+const TodoEdit = ({ setIsOpen, todos, setTodos, id }) => {
+  const [editTitle, setEditTitle] = useState('');
 
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  const [editTitle, onChangeEditTitle, titleReset] = useInput();
-  const [editComment, onChangeEditComment, commentReset] = useInput();
-  const [check, setCheck] = useState([]);
-
-  // onCheck -> 배열을 JOIN으로 문자열로 바꾼다...
-  const onCheck = selected => {
-    setCheck([...check, selected]);
-  };
-  const onUnCheck = selected => {
-    setCheck(check.filter(el => el !== selected));
-  };
-
   const onSubmit = () => {
-    titleReset();
-    commentReset();
-    closeModal();
-    // dispatch(__editTodo({ id: id, title: editTitle, content: editComment, tag: check.join(',') }));
+    // setTodos([...todos, { todo: editTitle, isCompleted: false }]);
+    // userApis.updateTodo(todos.id).then(res => {
+    //   console.log('🚀 ⁝ onSubmit ⁝ res', res);
+    //   // setTodos(...todos, { todo: editTitle });
+    //   setTodos(res.data);
+    // });
+    userApis
+      .updateTodo(id)
+      .then(res => {
+        console.log('🚀 ⁝ onSubmit ⁝ id', id);
+        console.log('🚀 ⁝ onSubmit ⁝ res', res);
+        // setTodos(
+        //   todos.map(todo => {
+        //     return todo.id === todos.id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+        //   })
+        // );
+      })
+      .catch(err => {
+        console.log('에러', err);
+      });
+    // closeModal();
   };
 
   return (
     <ModalBack onClick={closeModal}>
       <ModalBox variants={CreateAnimation} initial='start' animate='end' onClick={e => e.stopPropagation()}>
         <ModalHeader>
-          <ModalLable size={35}>수정하기</ModalLable>
+          <ModalLable size={30}>수정하기</ModalLable>
         </ModalHeader>
 
         <ModalCon>
-          <ModalTitle onChange={onChangeEditTitle} placeholder={title}></ModalTitle>
+          <ModalTitle onChange={setEditTitle} placeholder={editTitle}></ModalTitle>
 
-          <div style={{display:'flex', justifyContent:'space-around'}}>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
             <MainButton buttonName={'수정하기'} onClick={onSubmit} />
             <MainButton buttonName={'취소'} onClick={closeModal} />
           </div>
@@ -58,7 +63,7 @@ const ModalBack = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,7 +97,6 @@ const ModalTitle = styled.input`
   font-size: 20px;
   color: #2f2f2f;
 `;
-
 
 const ModalLable = styled.div`
   font-size: ${props => props.size}px;

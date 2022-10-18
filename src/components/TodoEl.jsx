@@ -10,7 +10,6 @@ const TodoEl = ({ id, todos, setTodos, onRemove, onEdit }) => {
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
-
   const onToggle = id => {
     setTodos(
       todos.map(todo => {
@@ -28,8 +27,8 @@ const TodoEl = ({ id, todos, setTodos, onRemove, onEdit }) => {
 
         <Title isCompleted={isCompleted}>{todos.todo}</Title>
 
-        <Edit onClick={() => onEdit(id)}>
-          <MdEdit />
+        <Edit>
+          <MdEdit onClick={() => onEdit()} />
         </Edit>
 
         <Remove onClick={() => onRemove(isTodo.id)}>
@@ -51,7 +50,7 @@ const Edit = styled.div`
   &:hover {
     color: #f70d1a;
   }
-  display: none;
+  /* display: none; */
 `;
 
 const Remove = styled.div`
@@ -63,7 +62,7 @@ const Remove = styled.div`
   &:hover {
     color: #f70d1a;
   }
-  display: none;
+  /* display: none; */
 `;
 
 const ItemBlock = styled.div`
@@ -72,11 +71,15 @@ const ItemBlock = styled.div`
   align-items: center;
   flex-wrap: wrap;
   width: 300px;
-
   padding-top: 12px;
   padding-bottom: 12px;
   &:hover {
     ${Remove} {
+      display: initial;
+    }
+  }
+  &:hover {
+    ${Edit} {
       display: initial;
     }
   }
