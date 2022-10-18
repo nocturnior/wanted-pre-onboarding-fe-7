@@ -7,9 +7,8 @@ const TodoList = ({ todos, onToggle, onRemove }) => {
   const [myTodos, setMyTodos] = React.useState([]);
 
   useEffect(() => {
-    // e.preventDefault();
     userApis.getTodo().then(res => {
-      // console.log('All Todos', res.data);
+      console.log('All Todos', res.data);
       setMyTodos(res.data);
     });
   }, []);

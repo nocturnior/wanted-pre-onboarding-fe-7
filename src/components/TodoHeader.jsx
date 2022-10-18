@@ -1,16 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TodoHeader = ({ todos, setTodos }) => {
+const TodoHeader = ({ todos }) => {
   const undoneTasks = todos.filter(todo => !todo.isCompleted);
 
   const today = new Date();
+
   const dateString = today.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
+
   const dayName = today.toLocaleDateString('ko-KR', { weekday: 'long' });
+
   return (
     <HeaderWrap>
       <Title>🎲오늘 할 일🎲</Title>

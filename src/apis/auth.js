@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { authApi, setToken } from '../api';
 
 export const userApis = {
@@ -17,6 +16,7 @@ export const userApis = {
   // Todos 영역
   getTodo: async data => {
     const response = await authApi.get('/todos', data);
+    console.log('🚀 ⁝ response', response);
     return response;
   },
   createTodo: async data => {
@@ -27,8 +27,8 @@ export const userApis = {
     const response = await authApi.put('/todos/:id', data);
     return response;
   },
-  deleteTodo: async data => {
-    const response = await authApi.delete(`/todos/:id` + data);
+  deleteTodo: async id => {
+    const response = await authApi.delete(`todos/` + id);
     return response;
   },
 };

@@ -12,6 +12,13 @@ const TodoForm = ({ todos, setTodos, key }) => {
 
   const data = { todo: inputTitleValue };
 
+  React.useEffect(() => {
+    userApis.getTodo().then(res => {
+      console.log('All Todos', res.data);
+      setTodos(res.data);
+    });
+  }, [setTodos]);
+
   const addItem = e => {
     e.preventDefault();
     setTodos([...todos, { key: key, todo: inputTitleValue, isCompleted: false }]);
@@ -20,7 +27,7 @@ const TodoForm = ({ todos, setTodos, key }) => {
     userApis
       .createTodo(data)
       .then(res => {
-        console.log('ㅎㅇ',res)
+        console.log('ㅎㅇ', res);
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);

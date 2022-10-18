@@ -1,12 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
 import TodoEdit from './TodoEdit';
 
 import { userApis } from './../apis/auth';
 
-const TodoEl = ({ todos, onToggle, onEdit, onRemove }) => {
-  const { id, todo, isCompleted } = todos;
+const TodoEl = ({ id, todos, setTodos }) => {
+  
+  const [isTodo, setIsTodo] = React.useState([]);
+  const [isCompleted, setIsCompleted] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+
+
+  useEffect(() => {
+    userApis.getTodo().then(res => {
+      console.log('All Todos', res.data);
+    });
+  }, []);
+
+  const onToggle = id => {
+    setTodos(
+      todos.map(todo => {
+        return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+      })
+    );
+  };
+
+  const onEdit = id => {
+    userApis.updateTodo(res => {
+      setTodos(
+        todos.map(todo => {
+          return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+        })
+      );
+    });
+    setIsOpen(true);
+  };
+
+  const onRemove = id => {
+    userApis
+      .deleteTodo(todos.id)
+      .then(res => {
+        if (res.status === 204) {
+          console.log('res', res);
+          setIsTodo(isTodo.filter(todo => todo.id !== id));
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className='todoitem'>
@@ -15,7 +58,7 @@ const TodoEl = ({ todos, onToggle, onEdit, onRemove }) => {
           {isCompleted && <MdDone />}
         </CheckCircle>
 
-        <Title isCompleted={isCompleted}>{todo}</Title>
+        <Title isCompleted={isCompleted}>{todos.todo}</Title>
 
         <Edit onClick={() => onEdit(id)}>
           <MdEdit />
