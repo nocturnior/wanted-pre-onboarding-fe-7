@@ -16,7 +16,7 @@ export const userApis = {
   // Todos 영역
   getTodo: async data => {
     const response = await authApi.get('/todos', data);
-    console.log('🚀 ⁝ response', response);
+    // console.log('🚀 ⁝ response', response);
     return response;
   },
   createTodo: async data => {

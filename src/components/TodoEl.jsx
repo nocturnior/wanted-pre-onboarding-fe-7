@@ -5,18 +5,11 @@ import TodoEdit from './TodoEdit';
 
 import { userApis } from './../apis/auth';
 
-const TodoEl = ({ id, todos, setTodos }) => {
-  
-  const [isTodo, setIsTodo] = React.useState([]);
+const TodoEl = ({ id, todos, setTodos, onRemove, onEdit }) => {
+  const [isTodo, setIsTodo] = React.useState(todos);
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
-
-  useEffect(() => {
-    userApis.getTodo().then(res => {
-      console.log('All Todos', res.data);
-    });
-  }, []);
 
   const onToggle = id => {
     setTodos(
@@ -24,31 +17,6 @@ const TodoEl = ({ id, todos, setTodos }) => {
         return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
       })
     );
-  };
-
-  const onEdit = id => {
-    userApis.updateTodo(res => {
-      setTodos(
-        todos.map(todo => {
-          return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
-        })
-      );
-    });
-    setIsOpen(true);
-  };
-
-  const onRemove = id => {
-    userApis
-      .deleteTodo(todos.id)
-      .then(res => {
-        if (res.status === 204) {
-          console.log('res', res);
-          setIsTodo(isTodo.filter(todo => todo.id !== id));
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   return (
@@ -64,7 +32,7 @@ const TodoEl = ({ id, todos, setTodos }) => {
           <MdEdit />
         </Edit>
 
-        <Remove onClick={() => onRemove(id)}>
+        <Remove onClick={() => onRemove(isTodo.id)}>
           <MdDelete />
         </Remove>
       </ItemBlock>

@@ -13,11 +13,11 @@ const Todos = () => {
   const [todos, setTodos] = React.useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
   let { id } = useParams();
-
+  
   useEffect(() => {
     userApis.getTodo().then(res => {
-      console.log('All Todos', res.data.id);
-      id = res.data.id;
+      console.log('All Todos', res.data);
+      setTodos(res.data)
     });
   }, []);
 
@@ -25,9 +25,8 @@ const Todos = () => {
     <Wrap>
       <TodoHeader id={id} todos={todos} setTodos={setTodos} />
       <TodoForm id={id} todos={todos} setTodos={setTodos} />
-      <TodoList id={id} todos={todos} />
+      <TodoList id={id} todos={todos} setTodos={setTodos}/>
       {isOpen && <TodoEdit setIsOpen={setIsOpen} />}
-      <span>id : {id}</span>
     </Wrap>
   );
 };
