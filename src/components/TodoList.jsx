@@ -7,6 +7,7 @@ import TodoEdit from '../components/TodoEdit';
 
 const TodoList = ({ todos, setTodos, onToggle }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+
   const onRemove = id => {
     userApis
       .deleteTodo(id)
@@ -36,9 +37,9 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
           return <TodoEl todos={todos} key={uuidv4()} onRemove={onRemove} onEdit={onEdit} onToggle={onToggle} />;
         })}
         {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
-        {todos?.map(todos => {
+        {/* {todos?.map(todos => {
           return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
-        })}
+        })} */}
       </div>
     </div>
   );

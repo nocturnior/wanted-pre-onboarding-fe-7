@@ -32,6 +32,7 @@ const TodoEdit = ({ setIsOpen, todos, setTodos, id }) => {
         // );
       })
       .catch(err => {
+        console.log('🚀 ⁝ onSubmit ⁝ id', id);
         console.log('에러', err);
       });
     // closeModal();

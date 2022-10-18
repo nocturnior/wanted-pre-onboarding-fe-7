@@ -8,6 +8,7 @@ import TodoList from '../components/TodoList';
 import TodoEdit from '../components/TodoEdit';
 import { userApis } from './../apis/auth';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const Todos = () => {
   const [todos, setTodos] = React.useState([]);
@@ -27,6 +28,10 @@ const Todos = () => {
       <TodoForm id={id} todos={todos} setTodos={setTodos} />
       <TodoList id={id} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
       {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
+
+      {todos?.map(todos => {
+        return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
+      })}
     </Wrap>
   );
 };

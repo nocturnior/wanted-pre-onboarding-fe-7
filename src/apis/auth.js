@@ -24,7 +24,7 @@ export const userApis = {
     return response;
   },
   updateTodo: async id => {
-    const response = await authApi.put(`todos/` + id,{});
+    const response = await authApi.put(`todos/` + id, {});
     return response;
   },
   deleteTodo: async id => {
