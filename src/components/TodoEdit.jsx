@@ -9,20 +9,30 @@ import MainButton from './MainButton';
 import { userApis } from '../apis/auth';
 import { placeholder } from '@babel/types';
 
-const TodoEdit = ({ setIsOpen, placeholder, setIsTodos, id, isCompleted, setIsCompleted, onToggle, setIsTodo }) => {
+const TodoEdit = ({ setIsOpen, placeholder, id, isCompleted, setTodos, setIsCompleted, onToggle, setIsTodo }) => {
   const [editTitle, setEditTitle] = useState('');
   const data = { id: id, todo: editTitle, isCompleted: isCompleted };
 
   console.log('🚀 ⁝ TodoEdit ⁝ data', data);
+
+  // React.useEffect(() => {
+  //   userApis.getTodo().then(res => {
+  //     console.log('All Todos', res.data);
+  //     setTodos(res.data);
+  //   });
+  // }, []);
+
   const closeModal = () => {
     setIsOpen(false);
   };
 
   const onChange = e => {
+    e.preventDefault();
     setEditTitle(e.target.value);
   };
 
   const onUpdate = id => {
+    console.log('🚀 ⁝ onUpdate ⁝ data', data);
     userApis
       .updateTodo(data)
       .then(res => {
@@ -30,7 +40,7 @@ const TodoEdit = ({ setIsOpen, placeholder, setIsTodos, id, isCompleted, setIsCo
           console.log('res', res);
           userApis.getTodo().then(res => {
             console.log('All Todos', res.data);
-            setIsTodo(res.data);
+            setTodos(res.data);
           });
         }
       })

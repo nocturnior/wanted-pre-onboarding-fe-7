@@ -12,13 +12,16 @@ const TodoForm = ({ todos, setTodos, key }) => {
   const data = { todo: inputTitleValue };
 
   const addItem = () => {
-    setTodos([...todos, { id: todos.id, key: key, todo: inputTitleValue, isCompleted: false }]);
+    // setTodos([...todos, { id: todos.id, key: key, todo: inputTitleValue, isCompleted: false }]);
     setInputTitleValue('');
 
     userApis
       .createTodo(data)
       .then(res => {
-        console.log('🚀 ⁝ addItem ⁝ res', res);
+        userApis.getTodo().then(res => {
+          setTodos(res.data);
+          console.log('🚀 ⁝ addItem ⁝ res', res)
+        });
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);

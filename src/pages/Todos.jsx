@@ -16,7 +16,7 @@ const Todos = () => {
 
   useEffect(() => {
     userApis.getTodo().then(res => {
-      console.log('All Todos', res.data);
+      // console.log('All Todos', res.data);
       setTodos(res.data);
     });
   }, []);

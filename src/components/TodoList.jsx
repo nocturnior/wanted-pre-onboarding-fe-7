@@ -7,6 +7,11 @@ import { userApis } from '../apis/auth';
 import TodoEdit from '../components/TodoEdit';
 
 const TodoList = ({ todos, setTodos }) => {
+  useEffect(() => {
+    userApis.getTodo().then(res => {
+      setTodos(res.data);
+    });
+  }, []);
 
   const onRemove = id => {
     // setTodos(todos.filter(todo => todo.id !== id));
@@ -16,7 +21,6 @@ const TodoList = ({ todos, setTodos }) => {
         if (res.status === 204) {
           console.log('res', res);
           userApis.getTodo().then(res => {
-            console.log('All Todos', res.data);
             setTodos(res.data);
           });
         }
@@ -30,7 +34,7 @@ const TodoList = ({ todos, setTodos }) => {
     <div id='todoboard_wrap'>
       <div className='todos'>
         {todos?.map(todos => {
-          return <TodoEl id={todos.id} todos={todos} key={uuidv4()} onRemove={onRemove} />;
+          return <TodoEl id={todos.id} todos={todos} setTodos={setTodos} key={uuidv4()} onRemove={onRemove} />;
         })}
       </div>
     </div>

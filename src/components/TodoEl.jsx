@@ -4,20 +4,27 @@ import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
 
 import TodoEdit from './TodoEdit';
+import { userApis } from '../apis/auth';
 
 const TodoEl = ({ todos, setTodos, onRemove }) => {
-  const [isTodo, setIsTodo] = React.useState([todos]);
-  console.log('🚀 ⁝ TodoEl ⁝ todos', todos)
+  const [isTodo, setIsTodo] = React.useState(todos);
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const { id } = useParams();
 
-  const onToggle = id => {
-    setIsTodo(
-      todos.map(todo => {
-        return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
-      })
-    );
+  const onToggle = () => {
+    setIsCompleted(todos.id === id ? !todos.isCompleted : !todos.isCompleted);
+    userApis.updateTodo(todos).then(res => {
+      console.log('🚀 ⁝ onToggle ⁝ res', res);
+    });
+    userApis.getTodo().then(res => {
+      setIsTodo(res.data);
+    });
+    // setTodos(
+    //   todoArr.map(todo => {
+    //     return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+    //   })
+    // );
   };
 
   const onEdit = () => {
@@ -27,7 +34,7 @@ const TodoEl = ({ todos, setTodos, onRemove }) => {
   return (
     <div className='todoitem'>
       <ItemBlock>
-        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(isTodo.id)}>
+        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(todos.id)}>
           {isCompleted && <MdDone />}
         </CheckCircle>
 
@@ -37,11 +44,11 @@ const TodoEl = ({ todos, setTodos, onRemove }) => {
           <MdEdit onClick={() => onEdit()} />
         </Edit>
 
-        <Remove onClick={() => onRemove(isTodo.id)}>
+        <Remove onClick={() => onRemove(todos.id)}>
           <MdDelete />
         </Remove>
 
-        {isOpen && <TodoEdit id={todos.id} placeholder={todos.todo} todos={todos} setIsTodo={setIsTodo} setIsOpen={setIsOpen} isCompleted={isCompleted} setIsCompleted={setIsCompleted} onToggle={onToggle} />}
+        {isOpen && <TodoEdit id={todos.id} placeholder={todos.todo} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} isCompleted={isCompleted} setIsCompleted={setIsCompleted} onToggle={onToggle} />}
       </ItemBlock>
     </div>
   );

@@ -22,7 +22,7 @@ const SignIn = () => {
   const [userInfo, setUserInfo] = useState({ email: '', pw: '' });
 
   // 버튼 활성/비활성
-  const [isEnable, setIsEnable] = useState(true);
+  let [isEnable, setIsEnable] = useState(false);
 
   // enter키로 로그인
   const onKeyDown = e => {
@@ -31,10 +31,13 @@ const SignIn = () => {
     }
   };
 
+  const ActiveIsPassedLogin = () => {
+    return userInfo.email.includes('@') && userInfo.pw.length >= 8 ? setIsEnable(true) : setIsEnable(false);
+  };
+
   // 로그인 핸들러
   const onSigninHandler = e => {
     e.preventDefault();
-
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
     const data = { email: enteredEmail, password: enteredPassword };
@@ -52,26 +55,15 @@ const SignIn = () => {
       });
   };
 
-  useEffect(
-    e => {
-      userInfo.email && userInfo.pw ? setIsEnable(false) : setIsEnable(true);
-    },
-    [userInfo]
-  );
-
-  const ActiveIsPassedLogin = () => {
-    return userInfo.email.includes('@') && userInfo.pw.length >= 5 ? isEnable(true) : isEnable(false);
-  };
-
   return (
     <Wrap>
       <h1 style={{ fontSize: '30px', fontWeight: '700', textAlign: 'center', margin: '20px 0px' }}>로그인</h1>
 
       {/* 이메일 */}
-      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} onKeyDown={onKeyDown} />
+      <EditInput inputLabel={'이메일'} placeholder={'이메일'} type={'email'} inref={emailInputRef} onKeyUp={ActiveIsPassedLogin} />
 
       {/* 비밀번호 */}
-      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} minlength={'8'} inref={passwordInputRef} onKeyDown={onKeyDown} />
+      <EditInput inputLabel={'비밀번호'} placeholder={'비밀번호'} type={'password'} minlength={'8'} inref={passwordInputRef} onKeyUp={ActiveIsPassedLogin} />
 
       {/* 회원가입으로 */}
       <GoSignup
