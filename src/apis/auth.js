@@ -23,8 +23,8 @@ export const userApis = {
     const response = await authApi.post('/todos', data);
     return response;
   },
-  updateTodo: async id => {
-    const response = await authApi.put(`todos/` + id, {});
+  updateTodo: async (id, data) => {
+    const response = await authApi.put(`todos/` + id, { data });
     return response;
   },
   deleteTodo: async id => {

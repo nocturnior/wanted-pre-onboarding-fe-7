@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
 import TodoEdit from './TodoEdit';
 
 import { userApis } from './../apis/auth';
 
-const TodoEl = ({ id, todos, setTodos, onRemove, onEdit }) => {
+const TodoEl = ({ todos, setTodos, onRemove, onEdit }) => {
   const [isTodo, setIsTodo] = React.useState(todos);
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
+  const { id } = useParams();
 
   const onToggle = id => {
     setTodos(

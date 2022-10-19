@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 
@@ -6,8 +7,10 @@ import useInput from '../hooks/useInput';
 import MainButton from './MainButton';
 import { userApis } from '../apis/auth';
 
-const TodoEdit = ({ setIsOpen, todos, setTodos, id }) => {
+const TodoEdit = ({ setIsOpen, todos, setTodos }) => {
   const [editTitle, setEditTitle] = useState('');
+  const id = todos.id;
+  const data = { todo: editTitle,  };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -23,8 +26,8 @@ const TodoEdit = ({ setIsOpen, todos, setTodos, id }) => {
     userApis
       .updateTodo(id)
       .then(res => {
-        console.log('🚀 ⁝ onSubmit ⁝ id', id);
         console.log('🚀 ⁝ onSubmit ⁝ res', res);
+        // console.log('🚀 ⁝ onSubmit ⁝ res', res);
         // setTodos(
         //   todos.map(todo => {
         //     return todo.id === todos.id ? { ...todo, isCompleted: !todo.isCompleted } : todo;

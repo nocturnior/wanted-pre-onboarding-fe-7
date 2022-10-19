@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import TodoEl from './TodoEl';
+import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { userApis } from '../apis/auth';
 
@@ -38,7 +39,7 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
         })}
         {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
         {todos?.map(todos => {
-          return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
+          return isOpen && <TodoEdit key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
         })}
       </div>
     </div>
