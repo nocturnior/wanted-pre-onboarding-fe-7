@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
 const Todos = () => {
   const [todos, setTodos] = React.useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
-  let { id } = useParams();
 
   useEffect(() => {
     userApis.getTodo().then(res => {
@@ -24,14 +23,14 @@ const Todos = () => {
 
   return (
     <Wrap>
-      <TodoHeader id={id} todos={todos} setTodos={setTodos} />
-      <TodoForm id={id} todos={todos} setTodos={setTodos} />
-      <TodoList id={id} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
+      <TodoHeader todos={todos} setTodos={setTodos} />
+      <TodoForm todos={todos} setTodos={setTodos} />
+      <TodoList todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
       {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
 
-      {todos?.map(todos => {
+      {/* {todos?.map(todos => {
         return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
-      })}
+      })} */}
     </Wrap>
   );
 };

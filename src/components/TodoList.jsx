@@ -9,6 +9,7 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onRemove = id => {
+    // setTodos(todos.filter(todo => todo.id !== id));
     userApis
       .deleteTodo(id)
       .then(res => {
@@ -23,7 +24,6 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
       .catch(err => {
         console.log(err);
       });
-    // setTodos([todos].filter(todo => todo.id !== id));
   };
 
   const onEdit = () => {
@@ -37,9 +37,9 @@ const TodoList = ({ todos, setTodos, onToggle }) => {
           return <TodoEl todos={todos} key={uuidv4()} onRemove={onRemove} onEdit={onEdit} onToggle={onToggle} />;
         })}
         {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
-        {/* {todos?.map(todos => {
+        {todos?.map(todos => {
           return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
-        })} */}
+        })}
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ const TodoEdit = ({ setIsOpen, todos, setTodos, id }) => {
           <ModalTitle onChange={setEditTitle} placeholder={editTitle}></ModalTitle>
 
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <MainButton buttonName={'수정하기'} onClick={onSubmit} />
+            <MainButton buttonName={'수정하기'} onClick={() => onSubmit()} />
             <MainButton buttonName={'취소'} onClick={closeModal} />
           </div>
         </ModalCon>

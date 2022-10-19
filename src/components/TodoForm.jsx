@@ -9,18 +9,16 @@ import { userApis } from './../apis/auth';
 const TodoForm = ({ todos, setTodos, key }) => {
   // 제목, 내용 인풋 밸류 가져오기
   const [inputTitleValue, setInputTitleValue] = useState('');
-
   const data = { todo: inputTitleValue };
 
-  const addItem = e => {
-    e.preventDefault();
-    setTodos([...todos, { key: key, todo: inputTitleValue, isCompleted: false }]);
+  const addItem = () => {
+    setTodos([...todos, { id: todos.id, key: key, todo: inputTitleValue, isCompleted: false }]);
     setInputTitleValue('');
 
     userApis
       .createTodo(data)
       .then(res => {
-        console.log('ㅎㅇ', res);
+        console.log('🚀 ⁝ addItem ⁝ res', res);
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);
