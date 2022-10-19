@@ -1,81 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
+
 import TodoEdit from './TodoEdit';
+import { userApis } from '../apis/auth';
 
-import { userApis } from './../apis/auth';
+const TodoEl = ({ todos, setTodos, onRemove }) => {
+  const [isTodo, setIsTodo] = React.useState(todos);
+  const [isCompleted, setIsCompleted] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const { id } = useParams();
 
-const TodoEl = ({ todos, onToggle, onEdit, onRemove }) => {
-  const { id, todo, isCompleted } = todos;
-
-  React.useEffect(() => {
-    userApis.getTodo(todos).then(res => {
-      console.log(res);
+  const onToggle = () => {
+    setIsCompleted(todos.id === id ? !todos.isCompleted : !todos.isCompleted);
+    userApis.updateTodo(todos).then(res => {
+      console.log('🚀 ⁝ onToggle ⁝ res', res);
     });
-  });
+    userApis.getTodo().then(res => {
+      setIsTodo(res.data);
+    });
+    // setTodos(
+    //   todoArr.map(todo => {
+    //     return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
+    //   })
+    // );
+  };
+
+  const onEdit = () => {
+    setIsOpen(true);
+  };
 
   return (
     <div className='todoitem'>
       <ItemBlock>
-        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(id)}>
+        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(todos.id)}>
           {isCompleted && <MdDone />}
         </CheckCircle>
 
-        <Title isCompleted={isCompleted}>{todo}</Title>
+        <Title isCompleted={isCompleted}>{todos.todo}</Title>
 
-        <Edit onClick={() => onEdit(id)}>
-          <MdEdit />
+        <Edit>
+          <MdEdit onClick={() => onEdit()} />
         </Edit>
 
-        <Remove onClick={() => onRemove(id)}>
+        <Remove onClick={() => onRemove(todos.id)}>
           <MdDelete />
         </Remove>
+
+        {isOpen && <TodoEdit id={todos.id} placeholder={todos.todo} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} isCompleted={isCompleted} setIsCompleted={setIsCompleted} onToggle={onToggle} />}
       </ItemBlock>
     </div>
   );
 };
 
 export default TodoEl;
-
-const Edit = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: red;
-  cursor: pointer;
-  &:hover {
-    color: #f70d1a;
-  }
-  display: none;
-`;
-
-const Remove = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: red;
-  cursor: pointer;
-  &:hover {
-    color: #f70d1a;
-  }
-  display: none;
-`;
-
-const ItemBlock = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  width: 300px;
-
-  padding-top: 12px;
-  padding-bottom: 12px;
-  &:hover {
-    ${Remove} {
-      display: initial;
-    }
-  }
-`;
 
 const CheckCircle = styled.div`
   width: 32px;
@@ -91,6 +70,65 @@ const CheckCircle = styled.div`
   cursor: pointer;
   color: ${props => props.isCompleted && `#4C787E`};
 `;
+
+const Edit = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  cursor: pointer;
+  &:hover {
+    color: #f70d1a;
+  }
+  /* display: none; */
+`;
+
+const Remove = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  cursor: pointer;
+  &:hover {
+    color: #f70d1a;
+  }
+  /* display: none; */
+`;
+
+const ItemBlock = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 300px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  &:hover {
+    ${Remove} {
+      display: initial;
+    }
+  }
+  &:hover {
+    ${Edit} {
+      display: initial;
+    }
+  }
+`;
+
+// const CheckCircle = styled.div`
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 16px;
+//   border: ${props => (props.isCompleted ? `1px solid #008080` : `1px solid #43BFC7`)};
+//   font-size: 16px;
+//   font-weight: 800;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin-right: 15px;
+//   cursor: pointer;
+//   color: ${props => props.isCompleted && `#4C787E`};
+// `;
 
 const Title = styled.span`
   flex: 1;

@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 
 // Components
 import EditInput from './EditInput';
 import MainButton from './MainButton';
 import { userApis } from './../apis/auth';
 
-const TodoForm = ({ todos, setTodos }) => {
+const TodoForm = ({ todos, setTodos, key }) => {
   // 제목, 내용 인풋 밸류 가져오기
   const [inputTitleValue, setInputTitleValue] = useState('');
-
   const data = { todo: inputTitleValue };
 
-  const addItem = e => {
-    e.preventDefault();
-
-    // setTodos([...todos, { id: { uuidv4 }, todo: inputTitleValue, isCompleted: false }]);
+  const addItem = () => {
+    // setTodos([...todos, { id: todos.id, key: key, todo: inputTitleValue, isCompleted: false }]);
     setInputTitleValue('');
 
     userApis
       .createTodo(data)
       .then(res => {
-        console.log(res.data);
-        // setTodos([...todos, { id: { uuidv4 }, todo: inputTitleValue, isCompleted: false }]);
+        userApis.getTodo().then(res => {
+          setTodos(res.data);
+          console.log('🚀 ⁝ addItem ⁝ res', res)
+        });
       })
       .catch(err => {
         console.log('🚀 ⁝ addItem ⁝ err', err.message);

@@ -1,49 +1,67 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
+import { MdDone } from 'react-icons/md';
 
 // Components
 import MainButton from './MainButton';
+import { userApis } from '../apis/auth';
+import { placeholder } from '@babel/types';
 
-const TodoEdit = ({ setIsOpen, title, content, id, tag }) => {
-  console.log('🚀 ~ tag', Array.isArray(tag));
-  // const dispatch = React.useDispatch();
+const TodoEdit = ({ setIsOpen, placeholder, id, isCompleted, setTodos, setIsCompleted, onToggle, setIsTodo }) => {
+  const [editTitle, setEditTitle] = useState('');
+  const data = { id: id, todo: editTitle, isCompleted: isCompleted };
+
+  console.log('🚀 ⁝ TodoEdit ⁝ data', data);
+
+  // React.useEffect(() => {
+  //   userApis.getTodo().then(res => {
+  //     console.log('All Todos', res.data);
+  //     setTodos(res.data);
+  //   });
+  // }, []);
 
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  const [editTitle, onChangeEditTitle, titleReset] = useInput();
-  const [editComment, onChangeEditComment, commentReset] = useInput();
-  const [check, setCheck] = useState([]);
-
-  // onCheck -> 배열을 JOIN으로 문자열로 바꾼다...
-  const onCheck = selected => {
-    setCheck([...check, selected]);
-  };
-  const onUnCheck = selected => {
-    setCheck(check.filter(el => el !== selected));
+  const onChange = e => {
+    e.preventDefault();
+    setEditTitle(e.target.value);
   };
 
-  const onSubmit = () => {
-    titleReset();
-    commentReset();
+  const onUpdate = id => {
+    console.log('🚀 ⁝ onUpdate ⁝ data', data);
+    userApis
+      .updateTodo(data)
+      .then(res => {
+        if (res.status === 200) {
+          console.log('res', res);
+          userApis.getTodo().then(res => {
+            console.log('All Todos', res.data);
+            setTodos(res.data);
+          });
+        }
+      })
+      .catch(err => {
+        console.log('에러', err);
+      });
     closeModal();
-    // dispatch(__editTodo({ id: id, title: editTitle, content: editComment, tag: check.join(',') }));
   };
 
   return (
     <ModalBack onClick={closeModal}>
       <ModalBox variants={CreateAnimation} initial='start' animate='end' onClick={e => e.stopPropagation()}>
         <ModalHeader>
-          <ModalLable size={35}>수정하기</ModalLable>
+          <ModalLable size={30}>수정하기</ModalLable>
         </ModalHeader>
 
         <ModalCon>
-          <ModalTitle onChange={onChangeEditTitle} placeholder={title}></ModalTitle>
+          <ModalTitle onChange={onChange} placeholder={placeholder}></ModalTitle>
 
-          <div style={{display:'flex', justifyContent:'space-around'}}>
-            <MainButton buttonName={'수정하기'} onClick={onSubmit} />
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <MainButton buttonName={'수정하기'} onClick={() => onUpdate(id)} />
             <MainButton buttonName={'취소'} onClick={closeModal} />
           </div>
         </ModalCon>
@@ -58,7 +76,7 @@ const ModalBack = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,7 +110,6 @@ const ModalTitle = styled.input`
   font-size: 20px;
   color: #2f2f2f;
 `;
-
 
 const ModalLable = styled.div`
   font-size: ${props => props.size}px;

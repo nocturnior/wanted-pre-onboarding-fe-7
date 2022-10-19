@@ -7,33 +7,30 @@ import TodoForm from '../components/TodoForm';
 import TodoList from '../components/TodoList';
 import TodoEdit from '../components/TodoEdit';
 import { userApis } from './../apis/auth';
+import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const Todos = () => {
   const [todos, setTodos] = React.useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const onToggle = id => {
-    setTodos(
-      todos.map(todo => {
-        return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
-      })
-    );
-  };
-
-  const onEdit = id => {
-    setIsOpen(true);
-  };
-
-  const onRemove = id => {
-    setTodos(todos.filter(todos => todos.id !== id));
-  };
+  useEffect(() => {
+    userApis.getTodo().then(res => {
+      // console.log('All Todos', res.data);
+      setTodos(res.data);
+    });
+  }, []);
 
   return (
     <Wrap>
       <TodoHeader todos={todos} setTodos={setTodos} />
       <TodoForm todos={todos} setTodos={setTodos} />
-      <TodoList todos={todos} onToggle={onToggle} onEdit={onEdit} onRemove={onRemove} />
-      {isOpen && <TodoEdit setIsOpen={setIsOpen} />}
+      <TodoList id={todos.id} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
+      {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
+
+      {/* {todos?.map((todo, idx) => {
+        return isOpen && <TodoEdit id={idx} key={uuidv4()} todos={todo} setTodos={setTodos} setIsOpen={setIsOpen} />;
+      })} */}
     </Wrap>
   );
 };

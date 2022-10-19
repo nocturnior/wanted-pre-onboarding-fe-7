@@ -1,38 +1,43 @@
 import axios from 'axios';
 
-// const token = sessionStorage.getItem('access_token');
-
+// WHAT Axios Instance Config
 export const getAPIHost = () => {
   return 'https://pre-onboarding-selection-task.shop/';
 };
 
 export const authApi = axios.create({
   baseUrl: getAPIHost(),
-  headers: { 'Content-Type': 'application/json', withCredentials: true },
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    // Authorization: localStorage.getItem('access_token'),
+  },
+  withCredentials: true,
 });
 
-authApi.interceptors.request.use(req => {
-  const token = getToken();
-  if (token) {
-    req.headers.authorization = token.access_token;
-  }
-  return req;
-});
-
-authApi.interceptors.response.use(
-  res => res,
+// WHAT 비동기 실행
+authApi.interceptors.request.use(
+  config => {
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+    // config.headers['Authorization'] = localStorage.getItem('access_token');
+    return config;
+  },
   err => {
     const status = err.response?.status;
     if (status === 403 || status === 401) {
       const refresh_token = getToken();
       if (refresh_token) {
         axios
-          .post(getAPIHost() + '/api/auth/reissue', {
-            headers: {
-              refresh_token: `${refresh_token}`,
-              'Content-Type': 'application/json',
+          .post(
+            getAPIHost() + '/todos',
+            {
+              headers: {
+                refresh_token: `${refresh_token}`,
+              },
             },
-          })
+            { withCredentials: true }
+          )
           .then(req => {
             setToken(req.data);
           })
@@ -46,7 +51,7 @@ authApi.interceptors.response.use(
 );
 
 export const getToken = () => {
-  const item = localStorage.getItem(process.env.REACT_APP_TOKEN_SAVE_KEY);
+  const item = localStorage.getItem('access_token');
   if (item) {
     const token = JSON.parse(item);
     return token;
@@ -56,7 +61,7 @@ export const getToken = () => {
 
 export const setToken = token => {
   if (!token?.access_token) {
-    localStorage.setItem(process.env.REACT_APP_TOKEN_SAVE_KEY, '');
+    localStorage.setItem('access_token', '');
     return false;
   }
   const { access_token, refresh_token } = token;
@@ -64,23 +69,6 @@ export const setToken = token => {
     access_token,
     refresh_token,
   };
-  localStorage.setItem(process.env.REACT_APP_TOKEN_SAVE_KEY, JSON.stringify(auth_data));
+  localStorage.setItem(localStorage, JSON.stringify(auth_data));
   return auth_data;
 };
-
-export const removeToken = () => {
-  const keyName = process.env.REACT_APP_TOKEN_SAVE_KEY;
-  localStorage.removeItem(keyName);
-};
-
-// 기본부분
-// let api;
-
-// if (token) {
-//   const bearerToken = 'Bearer ' + token;
-//   api = axios.create({ baseURL: 'https://pre-onboarding-selection-task.shop/', headers: { authorization: bearerToken } });
-// } else {
-//   api = axios.create({ baseURL: 'https://pre-onboarding-selection-task.shop/' });
-// }
-
-// export default api;
