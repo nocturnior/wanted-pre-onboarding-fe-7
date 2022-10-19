@@ -3,7 +3,10 @@
 ## 기능구현 동영상
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/92668655/196719858-29db0054-8035-4275-bb9a-631e856f7ea9.gif)
 
-
+## 기능구현 방법
+1. 제공해준 서버 `npm start` 터미널에 입력
+2.  `wanted-pre-onboarding-fe-7` 에서 `yarn start`로 서버와 연결
+3.  `localhost:3000`에서 실행 가능
 
 ## ⚒ 구현기능
 
