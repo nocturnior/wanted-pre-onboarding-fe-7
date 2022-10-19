@@ -25,11 +25,11 @@ const Todos = () => {
     <Wrap>
       <TodoHeader todos={todos} setTodos={setTodos} />
       <TodoForm todos={todos} setTodos={setTodos} />
-      <TodoList todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
+      <TodoList id={todos.id} todos={todos} setTodos={setTodos} setIsOpen={setIsOpen} />
       {/* {isOpen && <TodoEdit id={todos.id} todos={todos} setIsOpen={setIsOpen} />} */}
 
-      {/* {todos?.map(todos => {
-        return isOpen && <TodoEdit id={todos.id} key={uuidv4()} todos={todos} setIsOpen={setIsOpen} />;
+      {/* {todos?.map((todo, idx) => {
+        return isOpen && <TodoEdit id={idx} key={uuidv4()} todos={todo} setTodos={setTodos} setIsOpen={setIsOpen} />;
       })} */}
     </Wrap>
   );

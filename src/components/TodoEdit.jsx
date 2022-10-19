@@ -2,43 +2,42 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
+import { MdDone } from 'react-icons/md';
 
 // Components
 import MainButton from './MainButton';
 import { userApis } from '../apis/auth';
+import { placeholder } from '@babel/types';
 
-const TodoEdit = ({ setIsOpen, todos, setTodos }) => {
+const TodoEdit = ({ setIsOpen, placeholder, setIsTodos, id, isCompleted, setIsCompleted, onToggle, setIsTodo }) => {
   const [editTitle, setEditTitle] = useState('');
-  const id = todos.id;
-  const data = { todo: editTitle,  };
+  const data = { id: id, todo: editTitle, isCompleted: isCompleted };
 
+  console.log('🚀 ⁝ TodoEdit ⁝ data', data);
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  const onSubmit = () => {
-    // setTodos([...todos, { todo: editTitle, isCompleted: false }]);
-    // userApis.updateTodo(todos.id).then(res => {
-    //   console.log('🚀 ⁝ onSubmit ⁝ res', res);
-    //   // setTodos(...todos, { todo: editTitle });
-    //   setTodos(res.data);
-    // });
+  const onChange = e => {
+    setEditTitle(e.target.value);
+  };
+
+  const onUpdate = id => {
     userApis
-      .updateTodo(id)
+      .updateTodo(data)
       .then(res => {
-        console.log('🚀 ⁝ onSubmit ⁝ res', res);
-        // console.log('🚀 ⁝ onSubmit ⁝ res', res);
-        // setTodos(
-        //   todos.map(todo => {
-        //     return todo.id === todos.id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
-        //   })
-        // );
+        if (res.status === 200) {
+          console.log('res', res);
+          userApis.getTodo().then(res => {
+            console.log('All Todos', res.data);
+            setIsTodo(res.data);
+          });
+        }
       })
       .catch(err => {
-        console.log('🚀 ⁝ onSubmit ⁝ id', id);
         console.log('에러', err);
       });
-    // closeModal();
+    closeModal();
   };
 
   return (
@@ -49,10 +48,10 @@ const TodoEdit = ({ setIsOpen, todos, setTodos }) => {
         </ModalHeader>
 
         <ModalCon>
-          <ModalTitle onChange={setEditTitle} placeholder={editTitle}></ModalTitle>
+          <ModalTitle onChange={onChange} placeholder={placeholder}></ModalTitle>
 
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <MainButton buttonName={'수정하기'} onClick={() => onSubmit()} />
+            <MainButton buttonName={'수정하기'} onClick={() => onUpdate(id)} />
             <MainButton buttonName={'취소'} onClick={closeModal} />
           </div>
         </ModalCon>

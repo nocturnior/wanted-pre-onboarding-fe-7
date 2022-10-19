@@ -2,28 +2,32 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { MdDone, MdDelete, MdEdit } from 'react-icons/md';
+
 import TodoEdit from './TodoEdit';
 
-import { userApis } from './../apis/auth';
-
-const TodoEl = ({ todos, setTodos, onRemove, onEdit }) => {
-  const [isTodo, setIsTodo] = React.useState(todos);
+const TodoEl = ({ todos, setTodos, onRemove }) => {
+  const [isTodo, setIsTodo] = React.useState([todos]);
+  console.log('🚀 ⁝ TodoEl ⁝ todos', todos)
   const [isCompleted, setIsCompleted] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
   const { id } = useParams();
 
   const onToggle = id => {
-    setTodos(
+    setIsTodo(
       todos.map(todo => {
         return todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo;
       })
     );
   };
 
+  const onEdit = () => {
+    setIsOpen(true);
+  };
+
   return (
     <div className='todoitem'>
       <ItemBlock>
-        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(id)}>
+        <CheckCircle isCompleted={isCompleted} onClick={() => onToggle(isTodo.id)}>
           {isCompleted && <MdDone />}
         </CheckCircle>
 
@@ -36,12 +40,29 @@ const TodoEl = ({ todos, setTodos, onRemove, onEdit }) => {
         <Remove onClick={() => onRemove(isTodo.id)}>
           <MdDelete />
         </Remove>
+
+        {isOpen && <TodoEdit id={todos.id} placeholder={todos.todo} todos={todos} setIsTodo={setIsTodo} setIsOpen={setIsOpen} isCompleted={isCompleted} setIsCompleted={setIsCompleted} onToggle={onToggle} />}
       </ItemBlock>
     </div>
   );
 };
 
 export default TodoEl;
+
+const CheckCircle = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  border: ${props => (props.isCompleted ? `1px solid #008080` : `1px solid #43BFC7`)};
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  cursor: pointer;
+  color: ${props => props.isCompleted && `#4C787E`};
+`;
 
 const Edit = styled.div`
   display: flex;
@@ -87,20 +108,20 @@ const ItemBlock = styled.div`
   }
 `;
 
-const CheckCircle = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
-  border: ${props => (props.isCompleted ? `1px solid #008080` : `1px solid #43BFC7`)};
-  font-size: 16px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  cursor: pointer;
-  color: ${props => props.isCompleted && `#4C787E`};
-`;
+// const CheckCircle = styled.div`
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 16px;
+//   border: ${props => (props.isCompleted ? `1px solid #008080` : `1px solid #43BFC7`)};
+//   font-size: 16px;
+//   font-weight: 800;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin-right: 15px;
+//   cursor: pointer;
+//   color: ${props => props.isCompleted && `#4C787E`};
+// `;
 
 const Title = styled.span`
   flex: 1;
